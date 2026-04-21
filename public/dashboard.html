@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Smart Hostel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-building"></i>
+                <span>SmartHostel</span>
+            </div>
+            <div class="nav-actions">
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/dashboard" class="active">Dashboard</a></li>
+                    <li><a href="#" id="logoutBtn">Logout</a></li>
+                </ul>
+                <button id="themeToggle" class="icon-btn" type="button" aria-pressed="false">
+                    <i class="fas fa-moon"></i><span class="sr-only">Toggle theme</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="user-profile">
+                <i class="fas fa-user-circle"></i>
+                <h3 id="userName">Student</h3>
+                <p id="userHostel">Hostel: -</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="overview">
+                    <i class="fas fa-dashboard"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="nav-item" data-section="rooms">
+                    <i class="fas fa-door-open"></i>
+                    <span>Rooms</span>
+                </a>
+                <a href="#" class="nav-item" data-section="complaints">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Complaints</span>
+                </a>
+                <a href="#" class="nav-item" data-section="leave">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Leave Requests</span>
+                </a>
+                <a href="#" class="nav-item" data-section="notices">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Notices</span>
+                </a>
+                <a href="#" class="nav-item" data-section="profile">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div id="overview" class="content-section active">
+                <h2>Dashboard Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-door-open"></i>
+                        <div class="stat-info">
+                            <h3 id="roomStatus">Not Allocated</h3>
+                            <p>Room Status</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div class="stat-info">
+                            <h3 id="pendingComplaints">0</h3>
+                            <p>Pending Complaints</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <div class="stat-info">
+                            <h3 id="pendingLeaves">0</h3>
+                            <p>Pending Leaves</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-bullhorn"></i>
+                        <div class="stat-info">
+                            <h3 id="newNotices">0</h3>
+                            <p>New Notices</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="recentNotices" class="recent-section">
+                    <h3>Recent Notices</h3>
+                    <div id="noticesList" class="notices-list"></div>
+                </div>
+            </div>
+
+            <div id="rooms" class="content-section">
+                <h2>Room Information</h2>
+                <div id="roomDetails" class="room-details"></div>
+                <div id="roomsList" class="rooms-grid"></div>
+            </div>
+
+            <div id="complaints" class="content-section">
+                <h2>Complaints</h2>
+                <button class="btn btn-primary" onclick="showComplaintForm()">
+                    <i class="fas fa-plus"></i> New Complaint
+                </button>
+                <div id="complaintForm" class="form-container" style="display: none;">
+                    <form id="newComplaintForm">
+                        <div class="form-group">
+                            <label for="complaintTitle">Title</label>
+                            <input type="text" id="complaintTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="complaintCategory">Category</label>
+                            <select id="complaintCategory">
+                                <option value="electrical">Electrical</option>
+                                <option value="plumbing">Plumbing</option>
+                                <option value="cleaning">Cleaning</option>
+                                <option value="furniture">Furniture</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="complaintMessage">Description</label>
+                            <textarea id="complaintMessage" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-secondary" onclick="hideComplaintForm()">Cancel</button>
+                    </form>
+                </div>
+                <div id="complaintsList" class="complaints-list"></div>
+            </div>
+
+            <div id="leave" class="content-section">
+                <h2>Leave Requests</h2>
+                <button class="btn btn-primary" onclick="showLeaveForm()">
+                    <i class="fas fa-plus"></i> New Leave Request
+                </button>
+                <div id="leaveForm" class="form-container" style="display: none;">
+                    <form id="newLeaveForm">
+                        <div class="form-group">
+                            <label for="leaveFrom">From Date</label>
+                            <input type="date" id="leaveFrom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="leaveTo">To Date</label>
+                            <input type="date" id="leaveTo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="leaveReason">Reason</label>
+                            <textarea id="leaveReason" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyContact">Emergency Contact Name</label>
+                            <input type="text" id="emergencyContact">
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyPhone">Emergency Contact Phone</label>
+                            <input type="tel" id="emergencyPhone">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-secondary" onclick="hideLeaveForm()">Cancel</button>
+                    </form>
+                </div>
+                <div id="leaveRequestsList" class="leave-list"></div>
+            </div>
+
+            <div id="notices" class="content-section">
+                <h2>Notice Board</h2>
+                <div id="allNotices" class="notices-full-list"></div>
+            </div>
+
+            <div id="profile" class="content-section">
+                <h2>Profile Management</h2>
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="profileFullName">Full Name</label>
+                        <input type="text" id="profileFullName">
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmail">Email</label>
+                        <input type="email" id="profileEmail">
+                    </div>
+                    <div class="form-group">
+                        <label for="profilePhone">Phone</label>
+                        <input type="tel" id="profilePhone">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/ui.js"></script>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

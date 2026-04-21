@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Smart Hostel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar admin-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-building"></i>
+                <span>SmartHostel Admin</span>
+            </div>
+            <div class="nav-actions">
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/admin" class="active">Dashboard</a></li>
+                    <li><a href="#" id="adminLogoutBtn">Logout</a></li>
+                </ul>
+                <button id="themeToggle" class="icon-btn" type="button" aria-pressed="false">
+                    <i class="fas fa-moon"></i><span class="sr-only">Toggle theme</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar admin-sidebar">
+            <div class="user-profile">
+                <i class="fas fa-user-shield"></i>
+                <h3>Administrator</h3>
+                <p>Admin Panel</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="overview">
+                    <i class="fas fa-dashboard"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="nav-item" data-section="students">
+                    <i class="fas fa-users"></i>
+                    <span>Students</span>
+                </a>
+                <a href="#" class="nav-item" data-section="rooms">
+                    <i class="fas fa-door-open"></i>
+                    <span>Rooms</span>
+                </a>
+                <a href="#" class="nav-item" data-section="complaints">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Complaints</span>
+                </a>
+                <a href="#" class="nav-item" data-section="leaves">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Leave Requests</span>
+                </a>
+                <a href="#" class="nav-item" data-section="notices">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Notices</span>
+                </a>
+                <a href="#" class="nav-item" data-section="hostels">
+                    <i class="fas fa-building"></i>
+                    <span>Hostels</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div id="overview" class="content-section active">
+                <h2>Admin Dashboard Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-info">
+                            <h3 id="totalStudents">0</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-door-open"></i>
+                        <div class="stat-info">
+                            <h3 id="totalRooms">0</h3>
+                            <p>Total Rooms</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div class="stat-info">
+                            <h3 id="pendingComplaintsCount">0</h3>
+                            <p>Pending Complaints</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <div class="stat-info">
+                            <h3 id="pendingLeavesCount">0</h3>
+                            <p>Pending Leaves</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="occupancyChart" class="chart-container">
+                    <h3>Hostel Occupancy</h3>
+                    <div id="occupancyStats"></div>
+                </div>
+            </div>
+
+            <div id="students" class="content-section">
+                <h2>Student Management</h2>
+                <div id="studentsList" class="data-table-container"></div>
+            </div>
+
+            <div id="rooms" class="content-section">
+                <h2>Room Management</h2>
+                <button class="btn btn-primary" onclick="showAddRoomForm()">
+                    <i class="fas fa-plus"></i> Add New Room
+                </button>
+                <div id="roomsManagementList" class="data-table-container"></div>
+            </div>
+
+            <div id="complaints" class="content-section">
+                <h2>Complaint Management</h2>
+                <div id="complaintsManagementList" class="data-table-container"></div>
+            </div>
+
+            <div id="leaves" class="content-section">
+                <h2>Leave Request Management</h2>
+                <div id="leavesManagementList" class="data-table-container"></div>
+            </div>
+
+            <div id="notices" class="content-section">
+                <h2>Notice Management</h2>
+                <button class="btn btn-primary" onclick="showAddNoticeForm()">
+                    <i class="fas fa-plus"></i> Post New Notice
+                </button>
+                <div id="noticeForm" class="form-container" style="display: none;">
+                    <form id="newNoticeForm">
+                        <div class="form-group">
+                            <label for="noticeTitle">Title</label>
+                            <input type="text" id="noticeTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="noticeContent">Content</label>
+                            <textarea id="noticeContent" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="noticePriority">Priority</label>
+                            <select id="noticePriority">
+                                <option value="normal">Normal</option>
+                                <option value="important">Important</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Post Notice</button>
+                        <button type="button" class="btn btn-secondary" onclick="hideAddNoticeForm()">Cancel</button>
+                    </form>
+                </div>
+                <div id="noticesManagementList" class="data-table-container"></div>
+            </div>
+
+            <div id="hostels" class="content-section">
+                <h2>Hostel Management</h2>
+                <div id="hostelsList" class="data-table-container"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/ui.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>
