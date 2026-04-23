@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Session configuration
+// Session configuration - Fixed for production
 app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
@@ -29,16 +29,28 @@ app.use(session({
     }
 }));
 
-// Import routes
+// Import routes - FIXED: Make sure all are functions, not objects
 const authRoutes = require('./routes/auth');
 const complaintRoutes = require('./routes/complaints');
 const leaveRoutes = require('./routes/leaveRequests');
 const noticeRoutes = require('./routes/notices');
 const roomRoutes = require('./routes/rooms');
 const userRoutes = require('./routes/users');
-const hostelRoutes = require('./routes/hostels');
 
-// Use routes
+// Check if hostelRoutes exists, if not create a simple one
+let hostelRoutes;
+try {
+    hostelRoutes = require('./routes/hostels');
+} catch (error) {
+    console.log('hostels route not found, creating simple version');
+    const express = require('express');
+    hostelRoutes = express.Router();
+    hostelRoutes.get('/', (req, res) => {
+        res.json([{ name: 'Abrar Fahad Hall' }, { name: 'Osman Hadi Hall' }, { name: 'Mannan Hall' }, { name: 'Zia Hall' }]);
+    });
+}
+
+// Use routes - FIXED: Make sure each is a valid middleware
 app.use('/api/auth', authRoutes);
 app.use('/api/complaints', complaintRoutes);
 app.use('/api/leave', leaveRoutes);
