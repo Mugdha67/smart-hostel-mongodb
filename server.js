@@ -36,6 +36,7 @@ const leaveRoutes = require('./routes/leaveRequests');
 const noticeRoutes = require('./routes/notices');
 const roomRoutes = require('./routes/rooms');
 const userRoutes = require('./routes/users');
+const hostelRoutes = require('./routes/hostels');
 
 // Use routes
 app.use('/api/auth', authRoutes);
@@ -44,6 +45,7 @@ app.use('/api/leave', leaveRoutes);
 app.use('/api/notices', noticeRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/hostels', hostelRoutes);
 
 // Serve HTML pages
 app.get('/', (req, res) => {

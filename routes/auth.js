@@ -20,6 +20,22 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ error: 'Username already exists' });
         }
 
+        // Find hostel by name or create if it doesn't exist
+        let hostel = null;
+        if (hostel_id) {
+            hostel = await Hostel.findOne({ name: hostel_id });
+            
+            // If hostel doesn't exist in database, create it
+            if (!hostel) {
+                hostel = await Hostel.create({
+                    name: hostel_id,
+                    location: 'Campus',
+                    description: `${hostel_id} - Student Hostel`
+                });
+                console.log(`Created new hostel: ${hostel_id}`);
+            }
+        }
+
         // Create user
         const user = new User({
             username,
@@ -27,7 +43,7 @@ router.post('/register', async (req, res) => {
             full_name,
             email,
             phone,
-            hostel_id: hostel_id || null,
+            hostel_id: hostel ? hostel._id : null,
             role: 'student'
         });
 
@@ -94,8 +110,37 @@ router.post('/login', async (req, res) => {
 // Get all hostels
 router.get('/hostels', async (req, res) => {
     try {
-        const hostels = await Hostel.find({}, 'name location description');
-        res.json(hostels);
+        // Always return these 4 hostels
+        const hostelNames = ['Abrar Fahad Hall', 'Osman Hadi Hall', 'Mannan Hall', 'Zia Hall'];
+        
+        // Check if hostels exist in database, create if not
+        let hostels = await Hostel.find({ name: { $in: hostelNames } });
+        
+        if (hostels.length !== hostelNames.length) {
+            // Create missing hostels
+            for (const name of hostelNames) {
+                const exists = hostels.some(h => h.name === name);
+                if (!exists) {
+                    await Hostel.create({
+                        name: name,
+                        location: 'Campus',
+                        description: `${name} - Student Hostel`
+                    });
+                }
+            }
+            // Fetch again
+            hostels = await Hostel.find({ name: { $in: hostelNames } });
+        }
+        
+        // Return hostel names and IDs
+        const responseHostels = hostels.map(h => ({
+            id: h._id,
+            name: h.name,
+            location: h.location,
+            description: h.description
+        }));
+        
+        res.json(responseHostels);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Server error' });

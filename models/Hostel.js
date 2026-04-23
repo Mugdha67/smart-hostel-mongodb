@@ -8,9 +8,13 @@ const hostelSchema = new mongoose.Schema({
     },
     location: {
         type: String,
-        required: true
+        required: true,
+        default: 'Campus'
     },
-    description: String,
+    description: {
+        type: String,
+        default: ''
+    },
     total_rooms: {
         type: Number,
         default: 0
@@ -20,5 +24,8 @@ const hostelSchema = new mongoose.Schema({
         createdAt: 'created_at'
     }
 });
+
+// Add index for faster queries
+hostelSchema.index({ name: 1 });
 
 module.exports = mongoose.model('Hostel', hostelSchema);
